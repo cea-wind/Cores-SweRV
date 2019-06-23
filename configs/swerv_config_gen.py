@@ -5,6 +5,10 @@ import shutil
 import subprocess
 import sys
 import tempfile
+if sys.version[0] == '2':
+    devnull = open(os.devnull, 'w')
+else:
+    from subprocess import DEVNULL as devnull
 
 class SwervConfigGenerator(Generator):
     def run(self):
@@ -30,7 +34,7 @@ class SwervConfigGenerator(Generator):
         env = os.environ.copy()
         env['RV_ROOT'] = tmp_dir
         args = ['configs/swerv.config'] + self.config.get('args', [])
-        rc = subprocess.call(args, cwd=cwd, env=env, stdout=subprocess.DEVNULL)
+        rc = subprocess.call(args, cwd=cwd, env=env, stdout=devnull)
         if rc:
             exit(1)
 
